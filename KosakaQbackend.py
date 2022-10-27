@@ -139,7 +139,16 @@ class KosakaQbackend(BackendV2):
 
         :rtype: Target
         """
-        pass  # 翔・ひでよし、この行を消して`qiskit.transpiler.Target`というclassのオブジェクトをreturnしてください！propertyについてはOREILLY_入門_Python3_第2版_第Ⅰ部.pdfのp258を参照
+        return Target(description=None,  # (str)Target を説明するためのオプションの文字列。
+                      num_qubits=1,  # (int)バックエンドターゲットの持つ量子ビットの数を指定します。
+                      dt=0.000000001,  # (float)入力信号のシステム時間分解能(秒)
+                      granularity=1,  # (int)最小パルスゲートを表す整数値 dt`` 単位の分解能です。ユーザー定義のパルスゲートは、この粒度の倍数の持続時間を持つべきである。
+                      min_length=1,  # (int)パルスゲートの最小の長さを ``dt`` の単位で表した整数値。ユーザー定義のパルスゲートは、この長さより長くなければならない。
+                      pulse_alignment=1,  # (int)ゲート命令開始時刻の時間分解能を表した整数値。ゲート命令は、アラインメント値の倍数で開始
+                      aquire_alignment=1,  # (int)計測命令の開始時刻の時間分解能を表す整数値。計測命令は、アラインメント値の倍数で開始
+                      qubit_properties=None,)  # (list)QubitProperties` オブジェクトのリスト。オブジェクトのリストで、ターゲットデバイス上の各qubitの特性を定義。
+                                               #もし指定された場合、このリストの長さはターゲットの量子ビットの数と一致しなければなりません。はプロパティが定義された量子ビットの番号に一致します。もしいくつかの もしいくつかの量子ビットにプロパティがない場合は、そのエントリを None`` に設定することができます。
+
     
     
     @classmethod
