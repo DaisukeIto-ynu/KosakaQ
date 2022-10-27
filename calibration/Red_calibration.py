@@ -14,10 +14,11 @@ class Red_calibration():
         mode: Ey or E1E2 or all
         どの周りのスペクトルを取るか選べる。
         """
-        result = []  # Rabi_project20_E6EL06_area06_NV04_PLE_all_0.txtの内容が入ったlistを返します。
-        return result  # result[0]=frequencyのlist, result[1]=count（縦軸), result[2] = エラーバーのlist
+        self.result = []  # Rabi_project20_E6EL06_area06_NV04_PLE_all_0.txtの内容が入ったlistを返します。
+        self.power = []  #周波数 vs.laser_power
+        return self.result  # result[0]=frequencyのlist, result[1]=count（縦軸), result[2] = エラーバーのlist
     
-    def draw(fitting=False, error=False , Ey=False, E1E2=False, save=False):
+    def draw(fitting=False, error=False, Ey=False, E1E2=False, save=False):
         # optionでfittingするか選べる ← fitingのlistには_make_fittingメソッドを使って下さい。
         # optionでエラーバーいれるか選べる。
         # optionでE1E2,Eyの中心値を表示するか選べる。 ← 中心値にはcalibrationメソッドを使ってください。
@@ -25,6 +26,14 @@ class Red_calibration():
         # その他、optionを入れる。optionは引数にするが、あくまでoptionなので、選ばなくても良いようにする。
         # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
         pass
+    
+    def laser_draw(fitting=False, Ey=False, E1E2=False, save=False):
+        # optionでfittingするか選べる ← fitingのlistはこちらは簡単だと思うので、自分で作って下さい。
+        # optionで保存するか選べる。
+        # その他、optionを入れる。optionは引数にするが、あくまでoptionなので、選ばなくても良いようにする。
+        # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
+        pass
+
     
     def calibration():  # E1E2とEyのキャリブレーション結果を返す ← E1E2は二つの頂点のちょうど中心を取る。Eyは_make_fittingのself.x0を返す。
         # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
