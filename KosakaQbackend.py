@@ -12,7 +12,7 @@ import logging
 import warnings
 from typing import List, Union, Iterable, Tuple, Optional, Dict
 from qiskit.pulse.channels import PulseChannel
-from .job import IBMQJob
+from .job import KosakaQJob
 from qiskit.compiler import assemble
 from .utils import validate_job_tags
 from qiskit.circuit import Parameter
@@ -21,7 +21,7 @@ from qiskit.providers.provider import Provider
 from qiskit.providers.models.backendstatus import BackendStatus
 from qiskit.circuit.gate import Instruction, QuantumCircuit
 from qiskit.providers import BackendV2
-from .exceptions import IBMQBackendValueError
+from .exceptions import KosakaQBackendValueError
 from qiskit.providers.jobstatus import JobStatus
 from qiskit.transpiler.Target import Target
 from qiskit.providers.options import Options
@@ -67,7 +67,7 @@ class KosakaQbackend(BackendV2):
             use_measure_esp: Optional[bool] = None,
             live_data_enabled: Optional[bool] = None,
             **run_config: Dict
-    ) -> IBMQJob:
+    ) -> KosakaQJob:
  
         # pylint: disable=arguments-differ
         if job_share_level:
@@ -75,7 +75,7 @@ class KosakaQbackend(BackendV2):
                           "and will be removed in a future release.",
                           Warning, stacklevel=3)
 
-        validate_job_tags(job_tags, IBMQBackendValueError)
+        validate_job_tags(job_tags, KosakaQBackendValueError)
 
         sim_method = None
 
@@ -84,7 +84,7 @@ class KosakaQbackend(BackendV2):
         if use_measure_esp is None:
             use_measure_esp = measure_esp_enabled
         if use_measure_esp and not measure_esp_enabled:
-            raise IBMQBackendValueError(
+            raise KosakaQBackendValueError(
                 "ESP readout not supported on this device. Please make sure the flag "
                 "'use_measure_esp' is unset or set to 'False'."
             )
