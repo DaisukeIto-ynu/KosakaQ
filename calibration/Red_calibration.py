@@ -11,10 +11,13 @@ sys.path.append(".")
 import matplotlib.pyplot as plt
 import numpty as np
 from exceptions.exceptions import RedCalibrationError
+from KosakaQbackend import KosakaQbackend
+
 
 class Red_calibration():
     def __init__(self):
         self.mode = None
+        self.backend = KosakaQbackend("rabi")
         self.job_num = 0
         self.job = []
         self.mode = []
@@ -25,8 +28,7 @@ class Red_calibration():
         mode: Ey or E1E2 or all
         どの周りのスペクトルを取るか選べる。
         """
-        # self.result = []  # Rabi_project20_E6EL06_area06_NV04_PLE_all_0.txtの内容が入ったlistを返します。
-        # self.power = []  #周波数 vs.laser_power
+        self.job.append(self.backend.run(mode))
         self.job_num += 1  # 発行したjobの数
         self.mode.append(mode)
         self.flag.append({})  # 各種Flag
@@ -35,7 +37,7 @@ class Red_calibration():
         self.flag[-1]["fitting"] = False
         return self.job[-1]  # result[0]=frequencyのlist, result[1]=count（縦軸), result[2] = エラーバーのlist
     
-    
+
     def jobs(self):
         if self.job_num == 0:
             print("There is no job.")
@@ -46,7 +48,6 @@ class Red_calibration():
                 else:
                     print("job",i+1,"... ","mode: ",self.mode[i], " get_result: done")
              
-                
 
     # author: Goto Kyosuke
     def get_result(self, job_num = 0):  # job_num = 0にすることで、使うとき job_num-1 = -1 となり、最新のが使える。
