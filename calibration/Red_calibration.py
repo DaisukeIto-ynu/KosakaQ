@@ -43,17 +43,42 @@ class Red_calibration():
         pass  # result[job_num-1][0]=frequencyのlist, result[job_num-1][1]=count（縦軸), result[job_num-1][2] = エラーバーのlist
     
     
-    def draw(fitting=False, error=False, Ey=False, E1E2=False, save=False, job_num = 0):
+    def draw(self, fitting=False, error=False, Ey=False, E1E2=False, save=False, job_num = 0):
+        #get resultにデータがあるか
+        
+        #グラフの描画のためのインポート
+        import matplotlib.pyplot as plt
+        import numpty as np
+        
         # optionでfittingするか選べる ← fitingのlistには_make_fittingメソッドを使って下さい。
+        if fitting == True:
+            self._make_fitting()   # execute fitting (実行というよりかはfittingのリストを関数を使って作る？)
+        
         # optionでエラーバーいれるか選べる。
+        if error == True:
+            # exexute error bar
+            pass
+        
         # optionでE1E2,Eyの中心値を表示するか選べる。 ← 中心値にはcalibrationメソッドを使ってください。
+        if Ey == True:
+            self.calibration(job_num)
+        if E1E2 == True:
+            self.calibration(job_num)
+            
         # optionで保存するか選べる。
+        if save == True:
+            pass
+            # save
+        
         # その他、optionを入れる。optionは引数にするが、あくまでoptionなので、選ばなくても良いようにする。
+        
         # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
+        if self.mode == None:
+            print("error: run function is not done.")   #exeptionsのエラーリストからエラー表示
         pass
     
     
-    def laser_draw(fitting=False, Ey=False, E1E2=False, save=False, job_num = 0):
+    def laser_draw(self, fitting=False, Ey=False, E1E2=False, save=False, job_num = 0):
         # optionでfittingするか選べる ← fitingのlistはこちらは簡単だと思うので、自分で作って下さい。
         # optionで保存するか選べる。
         # その他、optionを入れる。optionは引数にするが、あくまでoptionなので、選ばなくても良いようにする。
