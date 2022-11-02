@@ -12,26 +12,32 @@ import logging
 import warnings
 from typing import List, Union, Iterable, Tuple, Optional, Dict
 from qiskit.pulse.channels import PulseChannel
-from .job import KosakaQJob
 from qiskit.compiler import assemble
-from .utils import validate_job_tags
 from qiskit.circuit import Parameter
 from qiskit.pulse import Schedule, LoConfig
 from qiskit.providers.provider import Provider
 from qiskit.providers.models.backendstatus import BackendStatus
-from qiskit.circuit.gate import Instruction, QuantumCircuit
+from qiskit.circuit.instruction import Instruction
+from qiskit.circuit.quantumcircuit import QuantumCircuit
 from qiskit.providers import BackendV2
-from .exceptions import KosakaQBackendValueError
 from qiskit.providers.jobstatus import JobStatus
-from qiskit.transpiler.Target import Target
+from qiskit.transpiler.target import Target
 from qiskit.providers.options import Options
 from qiskit.qobj.utils import MeasLevel, MeasReturnType
 from qiskit.qobj import QasmQobj, PulseQobj
 logger = logging.getLogger(__name__)
 
-from KosakaQ.KosakaQjob import KosakaQJob
-from KosakaQ.KosakaQcommunicate import KosakaQ_communicate
-
+# from KosakaQ.exceptions.exceptions import KosakaQBackendValueError
+# from KosakaQ.utils.utils import validate_job_tags
+# from KosakaQ.job.KosakaQJob import KosakaQJob
+# from KosakaQ.KosakaQcommunicate import KosakaQ_communicate
+import sys, os
+sys.path.append(".")
+sys.path.append("../")
+from exceptions.exceptions import KosakaQBackendValueError
+from utils.utils import validate_job_tags
+from job.KosakaQJob import KosakaQJob
+from KosakaQcommunicate import KosakaQ_communicate
 
 class KosakaQbackend(BackendV2):
     def __init__(self, BACKEND):
