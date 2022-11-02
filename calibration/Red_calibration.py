@@ -9,6 +9,8 @@ class Red_calibration():
     def __init__(self):
         self.mode = None
         self.job_num = 0
+        self.mode = []
+        self.calibration = []
     
     def run(self, mode):  # 大輔が作ります
         """
@@ -18,12 +20,24 @@ class Red_calibration():
         # self.result = []  # Rabi_project20_E6EL06_area06_NV04_PLE_all_0.txtの内容が入ったlistを返します。
         # self.power = []  #周波数 vs.laser_power
         self.job_num += 1  # 発行したjobの数
+        self.mode.append(mode)
         self.flag.append({})  # 各種Flag
         self.flag[-1]["get_result"] = False
         self.flag[-1]["calibration"] = False
+        self.flag[-1]["fitting"] = False
         return self.job[-1]  # result[0]=frequencyのlist, result[1]=count（縦軸), result[2] = エラーバーのlist
     
-    
+    def jobs(self):
+        if self.job_num == 0:
+            print("There is no job.")
+        else:
+            for i in range(self.job_num):
+                if self.flag[i]["get_result"] == False:
+                    print("job",i+1,"... ","mode: ",self.mode[i], " get_result: not yet")
+                else:
+                    print("job",i+1,"... ","mode: ",self.mode[i], " get_result: done")
+             
+                
     def get_result(self, job_num = 0):  # job_num = 0にすることで、使うとき job_num-1 = -1 となり、最新のが使える。
         # self.flag[-1]["get_result"] = True　だったら、already executed表示
         # job_status確認して表示
@@ -31,7 +45,7 @@ class Red_calibration():
         # status:doneだったら/なったら、result取ってくる。
         # job_num > self.job_num or job_num < 0 or not( type(job_num) == int )　だったら、raiseする。
         # 最後に、self.flag[job_num-1]["get_result"] = True
-        pass
+        pass  # result[job_num-1][0]=frequencyのlist, result[job_num-1][1]=count（縦軸), result[job_num-1][2] = エラーバーのlist
     
     
     def draw(self, fitting=False, error=False, Ey=False, E1E2=False, save=False, job_num = 0):
@@ -79,6 +93,7 @@ class Red_calibration():
     
     def calibration(self, job_num = 0):  # E1E2とEyのキャリブレーション結果を返す ← E1E2は二つの頂点のちょうど中心を取る。Eyは_make_fittingのself.x0を返す。
         # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
+        # 結果は　self.calibration[job_num-1]に辞書で入れる。例）[{E1E2:470.0678453678},{E1E2:470.0034567, Ey:470.145678}]
         pass
     
     
