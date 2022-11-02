@@ -6,9 +6,11 @@ Created on Thu Oct 27 18:30:33 2022
 """
 
  #グラフの描画のためのインポート
+import sys
+sys.path.append(".")
 import matplotlib.pyplot as plt
 import numpty as np
-from .exceptions import KosakaQBackendValueError　　　
+from exceptions.exceptions import RedCalibrationError
 
 class Red_calibration():
     def __init__(self):
@@ -28,7 +30,7 @@ class Red_calibration():
         self.flag[-1]["calibration"] = False
         return self.job[-1]  # result[0]=frequencyのlist, result[1]=count（縦軸), result[2] = エラーバーのlist
     
-    
+    # author: Goto Kyosuke
     def get_result(self, job_num = 0):  # job_num = 0にすることで、使うとき job_num-1 = -1 となり、最新のが使える。
         # self.flag[-1]["get_result"] = True　だったら、already executed表示
         # job_status確認して表示
@@ -39,6 +41,7 @@ class Red_calibration():
         pass
     
     
+    # author: Mori Yugo
     def draw(self, fitting=False, error=False, Ey=False, E1E2=False, save=False, job_num = 0):
         #get resultにデータがあるか
         
@@ -77,7 +80,7 @@ class Red_calibration():
         # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
         pass
 
-    
+    # author: Honda Yuma
     def calibration(self, job_num = 0):  # E1E2とEyのキャリブレーション結果を返す ← E1E2は二つの頂点のちょうど中心を取る。Eyは_make_fittingのself.x0を返す。
         # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
         pass
@@ -86,7 +89,8 @@ class Red_calibration():
     def save(self, job_num = 0):  # jsonにE1とExEy保存する。
         pass
     
-        
+    
+    # author: Ebihara Syo    
     def _make_fitting(self, job_num = 0): #Eyについてのfitingのlistを返す（ローレンチアン）、x0とγをself.x0とself.gammaに代入
         # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
         pass
