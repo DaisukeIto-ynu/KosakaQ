@@ -8,6 +8,7 @@ Created on Thu Oct 27 18:30:33 2022
 
 import copy
 from qiskit.exceptions import KosakaQRedcalibrationError
+from qiskit.providers.jobstatus import JobStatus
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -42,7 +43,6 @@ class Red_calibration():
         return self.job[-1]  # result[0]=frequencyのlist, result[1]=count（縦軸), result[2] = エラーバーのlist
     
 
-    # author: Goto Kyosuke
     def jobs(self):
         if self.job_num == 0:
             print("There is no job.")
@@ -75,9 +75,9 @@ class Red_calibration():
         
         # job_num > self.job_num or job_num < 0 or not( type(job_num) == int )　だったら、raiseする。
         # 最後に、self.flag[job_num-1]["get_result"] = True
-        pass  # result[job_num-1][0]=frequencyのlist, result[job_num-1][1]=count（縦軸), result[job_num-1][2] = エラーバーのlist
-    
-    
+            pass  # result[job_num-1][0]=frequencyのlist, result[job_num-1][1]=count（縦軸), result[job_num-1][2] = エラーバーのlist
+
+
     # author: Mori Yugo
     def draw(self, fitting=False, error=0, Ey=False, E1E2=False, save=False, job_num = 0):
         """
@@ -105,13 +105,13 @@ class Red_calibration():
             self._make_fitting(job_num)
         
         # optionでエラーバーいれるか選べる。
-        if error == 1
+        if error == 1:
             # exexute error bar 1
             pass
-        elif error = 2:
+        elif error == 2:
             # exexute error bar 2
             pass
-        elif error = 3:
+        elif error == 3:
             # exexute error bar 3
             pass
         
