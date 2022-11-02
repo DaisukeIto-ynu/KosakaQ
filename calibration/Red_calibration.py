@@ -48,8 +48,13 @@ class Red_calibration():
                 else:
                     print("job",i+1,"... ","mode: ",self.mode[i], " get_result: done")
              
+<<<<<<< HEAD
                 
 >>>>>>> 8c85fed09867e2cdee5e61519efa9b89b3c41f5d
+=======
+
+    # author: Goto Kyosuke
+>>>>>>> 454546e19a47970df296d1498abe2d3c920def33
     def get_result(self, job_num = 0):  # job_num = 0にすることで、使うとき job_num-1 = -1 となり、最新のが使える。
         # self.flag[-1]["get_result"] = True　だったら、already executed表示
         if self.flag[-1]["get_result"] == True:
@@ -57,19 +62,15 @@ class Red_calibration():
         
         # job_status確認して表示
         nowstatus = self.job[job_num].status()
+        print(nowstatus.value)
+        
         if nowstatus == JobStatus.QUEUED: # status:queuedだったら、何番目か表示して、このまま待つか聞いて、待つようだったらjob monitor表示
-            print("status : QUEUED")
-            print("Now waiting")
-        else nowstatus == JobStatus.VALIDATING:
-            print("status : VALIDATING")
-        else nowstatus == JobStatus.RUNNING:
-            print("status : RUNNING")
-        else nowstatus == JobStatus.CANCELLED:
-            print("status : CANCELLED")
-        else nowstatus == JobStatus.DONE: # status:doneだったら/なったら、result取ってくる。
-            print("status : DONE")
-        else nowstatus == JobStatus.ERROR:
-            print("status : ERROR")
+            print("You're job number is ",self.job[job_num].queue_position)
+        
+        elif nowstatus == JobStatus.DONE: # status:doneだったら/なったら、result取ってくる。
+            #self.job[job_num] = 
+        
+        
         
         
         # job_num > self.job_num or job_num < 0 or not( type(job_num) == int )　だったら、raiseする。
