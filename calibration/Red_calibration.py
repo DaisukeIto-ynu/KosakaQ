@@ -9,6 +9,7 @@ class Red_calibration():
     def __init__(self):
         self.mode = None
         self.job_num = 0
+        self.job = []
         self.mode = []
         self.calibration = []
     
