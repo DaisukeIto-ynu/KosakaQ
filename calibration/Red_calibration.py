@@ -41,9 +41,26 @@ class Red_calibration():
                 
     def get_result(self, job_num = 0):  # job_num = 0にすることで、使うとき job_num-1 = -1 となり、最新のが使える。
         # self.flag[-1]["get_result"] = True　だったら、already executed表示
+        if self.flag[-1]["get_result"] == True:
+            print("Already executed")
+        
         # job_status確認して表示
-        # status:queuedだったら、何番目か表示して、このまま待つか聞いて、待つようだったらjob monitor表示
-        # status:doneだったら/なったら、result取ってくる。
+        nowstatus = self.job[job_num].status()
+        if nowstatus == JobStatus.QUEUED: # status:queuedだったら、何番目か表示して、このまま待つか聞いて、待つようだったらjob monitor表示
+            print("status : QUEUED")
+            print("Now waiting")
+        else nowstatus == JobStatus.VALIDATING:
+            print("status : VALIDATING")
+        else nowstatus == JobStatus.RUNNING:
+            print("status : RUNNING")
+        else nowstatus == JobStatus.CANCELLED:
+            print("status : CANCELLED")
+        else nowstatus == JobStatus.DONE: # status:doneだったら/なったら、result取ってくる。
+            print("status : DONE")
+        else nowstatus == JobStatus.ERROR:
+            print("status : ERROR")
+        
+        
         # job_num > self.job_num or job_num < 0 or not( type(job_num) == int )　だったら、raiseする。
         # 最後に、self.flag[job_num-1]["get_result"] = True
         pass  # result[job_num-1][0]=frequencyのlist, result[job_num-1][1]=count（縦軸), result[job_num-1][2] = エラーバーのlist
