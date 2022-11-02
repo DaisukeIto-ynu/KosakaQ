@@ -5,6 +5,13 @@ Created on Thu Oct 27 18:30:33 2022
 @author: Yokohama National University, Kosaka Lab
 """
 
+ #グラフの描画のためのインポート
+import sys
+sys.path.append(".")
+import matplotlib.pyplot as plt
+import numpty as np
+from exceptions.exceptions import RedCalibrationError
+
 class Red_calibration():
     def __init__(self):
         self.mode = None
@@ -28,6 +35,9 @@ class Red_calibration():
         self.flag[-1]["fitting"] = False
         return self.job[-1]  # result[0]=frequencyのlist, result[1]=count（縦軸), result[2] = エラーバーのlist
     
+<<<<<<< HEAD
+    # author: Goto Kyosuke
+=======
     def jobs(self):
         if self.job_num == 0:
             print("There is no job.")
@@ -39,6 +49,7 @@ class Red_calibration():
                     print("job",i+1,"... ","mode: ",self.mode[i], " get_result: done")
              
                 
+>>>>>>> 8c85fed09867e2cdee5e61519efa9b89b3c41f5d
     def get_result(self, job_num = 0):  # job_num = 0にすることで、使うとき job_num-1 = -1 となり、最新のが使える。
         # self.flag[-1]["get_result"] = True　だったら、already executed表示
         if self.flag[-1]["get_result"] == True:
@@ -66,16 +77,13 @@ class Red_calibration():
         pass  # result[job_num-1][0]=frequencyのlist, result[job_num-1][1]=count（縦軸), result[job_num-1][2] = エラーバーのlist
     
     
+    # author: Mori Yugo
     def draw(self, fitting=False, error=False, Ey=False, E1E2=False, save=False, job_num = 0):
         #get resultにデータがあるか
         
-        #グラフの描画のためのインポート
-        import matplotlib.pyplot as plt
-        import numpty as np
-        
         # optionでfittingするか選べる ← fitingのlistには_make_fittingメソッドを使って下さい。
         if fitting == True:
-            self._make_fitting()   # execute fitting (実行というよりかはfittingのリストを関数を使って作る？)
+            self._make_fitting(job_num)
         
         # optionでエラーバーいれるか選べる。
         if error == True:
@@ -97,7 +105,7 @@ class Red_calibration():
         
         # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
         if self.mode == None:
-            print("error: run function is not done.")   #exeptionsのエラーリストからエラー表示
+            print("error: run function is not done.")   #exeptionsのエラーリストからエラー表示→ここも直す
         pass
     
     
@@ -108,7 +116,7 @@ class Red_calibration():
         # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
         pass
 
-    
+    # author: Honda Yuma
     def calibration(self, job_num = 0):  # E1E2とEyのキャリブレーション結果を返す ← E1E2は二つの頂点のちょうど中心を取る。Eyは_make_fittingのself.x0を返す。
         # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
         # 結果は　self.calibration[job_num-1]に辞書で入れる。例）[{E1E2:470.0678453678},{E1E2:470.0034567, Ey:470.145678}]
@@ -118,7 +126,8 @@ class Red_calibration():
     def save(self, job_num = 0):  # jsonにE1とExEy保存する。
         pass
     
-        
+    
+    # author: Ebihara Syo    
     def _make_fitting(self, job_num = 0): #Eyについてのfitingのlistを返す（ローレンチアン）、x0とγをself.x0とself.gammaに代入
         # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
         pass
