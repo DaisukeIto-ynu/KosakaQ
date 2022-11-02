@@ -10,6 +10,7 @@ class Red_calibration():
         self.mode = None
         self.job_num = 0
         self.mode = []
+        self.calibration = []
     
     def run(self, mode):  # 大輔が作ります
         """
@@ -23,6 +24,7 @@ class Red_calibration():
         self.flag.append({})  # 各種Flag
         self.flag[-1]["get_result"] = False
         self.flag[-1]["calibration"] = False
+        self.flag[-1]["fitting"] = False
         return self.job[-1]  # result[0]=frequencyのlist, result[1]=count（縦軸), result[2] = エラーバーのlist
     
     def jobs(self):
@@ -30,7 +32,10 @@ class Red_calibration():
             print("There is no job.")
         else:
             for i in range(self.job_num):
-                print("job",i+1,"... ","mode:",self.mode[i], " get_result: not yet")
+                if self.flag[i]["get_result"] == False:
+                    print("job",i+1,"... ","mode: ",self.mode[i], " get_result: not yet")
+                else:
+                    print("job",i+1,"... ","mode: ",self.mode[i], " get_result: done")
              
                 
     def get_result(self, job_num = 0):  # job_num = 0にすることで、使うとき job_num-1 = -1 となり、最新のが使える。
@@ -88,6 +93,7 @@ class Red_calibration():
     
     def calibration(self, job_num = 0):  # E1E2とEyのキャリブレーション結果を返す ← E1E2は二つの頂点のちょうど中心を取る。Eyは_make_fittingのself.x0を返す。
         # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
+        # 結果は　self.calibration[job_num-1]に辞書で入れる。例）[{E1E2:470.0678453678},{E1E2:470.0034567, Ey:470.145678}]
         pass
     
     
