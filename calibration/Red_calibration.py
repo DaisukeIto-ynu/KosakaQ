@@ -5,6 +5,12 @@ Created on Thu Oct 27 18:30:33 2022
 @author: Yokohama National University, Kosaka Lab
 """
 
+
+import copy
+from qiskit.exceptions import KosakaQRedcalibrationError
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
  #グラフの描画のためのインポート
 import sys
 sys.path.append(".")
@@ -35,9 +41,8 @@ class Red_calibration():
         self.flag[-1]["fitting"] = False
         return self.job[-1]  # result[0]=frequencyのlist, result[1]=count（縦軸), result[2] = エラーバーのlist
     
-<<<<<<< HEAD
+
     # author: Goto Kyosuke
-=======
     def jobs(self):
         if self.job_num == 0:
             print("There is no job.")
@@ -48,13 +53,8 @@ class Red_calibration():
                 else:
                     print("job",i+1,"... ","mode: ",self.mode[i], " get_result: done")
              
-<<<<<<< HEAD
-                
->>>>>>> 8c85fed09867e2cdee5e61519efa9b89b3c41f5d
-=======
 
     # author: Goto Kyosuke
->>>>>>> 454546e19a47970df296d1498abe2d3c920def33
     def get_result(self, job_num = 0):  # job_num = 0にすることで、使うとき job_num-1 = -1 となり、最新のが使える。
         # self.flag[-1]["get_result"] = True　だったら、already executed表示
         if self.flag[-1]["get_result"] == True:
@@ -150,8 +150,29 @@ class Red_calibration():
     def save(self, job_num = 0):  # jsonにE1とExEy保存する。
         pass
     
-    
-    # author: Ebihara Syo    
-    def _make_fitting(self, job_num = 0): #Eyについてのfitingのlistを返す（ローレンチアン）、x0とγをself.x0とself.gammaに代入
-        # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
-        pass
+
+    # author: Ebihara Syo
+    def _make_fitting(self, job_num = 0):
+        #E1,E2はエラーを返す
+        #Eyについてのfitingのlistを返す（ローレンチアン）、x0とγをself.x0とself.gammaに代入
+        #runをまだ実行してなかったら(self.mode == None)、エラーを返す。
+        
+        if self.mode == "E1":  # E1の場合
+            raise KosakaQRedcalibrationError('E1です')
+            
+        elif self.mode == "E2":  # E2の場合
+            raise KosakaQRedcalibrationError('E2です')
+            
+        elif self.mode == "Ey":  # Eyの場合
+            fre_y = copy.deepcopy[self.result[job_num - 1][0]]  # 縦軸の値
+            cou_x = copy.deepcopy[self.result[job_num - 1][1]]  # 横軸の値
+            
+            
+            
+            # Ey_frequencyはフィッティング後の縦軸の値
+            Ey_frequency = 1
+            return Ey_frequency
+        
+        elif self.mode == "All":  # 全体の場合
+            return 0
+        
