@@ -17,13 +17,10 @@ sys.path.append(".")
 import matplotlib.pyplot as plt
 import numpty as np
 from exceptions.exceptions import RedCalibrationError
-from KosakaQbackend import KosakaQbackend
-
 
 class Red_calibration():
     def __init__(self):
         self.mode = None
-        self.backend = KosakaQbackend("rabi")
         self.job_num = 0
         self.job = []
         self.mode = []
@@ -34,7 +31,8 @@ class Red_calibration():
         mode: Ey or E1E2 or all
         どの周りのスペクトルを取るか選べる。
         """
-        self.job.append(self.backend.run(mode))
+        # self.result = []  # Rabi_project20_E6EL06_area06_NV04_PLE_all_0.txtの内容が入ったlistを返します。
+        # self.power = []  #周波数 vs.laser_power
         self.job_num += 1  # 発行したjobの数
         self.mode.append(mode)
         self.flag.append({})  # 各種Flag
@@ -43,7 +41,9 @@ class Red_calibration():
         self.flag[-1]["fitting"] = False
         return self.job[-1]  # result[0]=frequencyのlist, result[1]=count（縦軸), result[2] = エラーバーのlist
     
-
+<<<<<<< HEAD
+    # author: Goto Kyosuke
+=======
     def jobs(self):
         if self.job_num == 0:
             print("There is no job.")
@@ -54,7 +54,13 @@ class Red_calibration():
                 else:
                     print("job",i+1,"... ","mode: ",self.mode[i], " get_result: done")
              
+<<<<<<< HEAD
                 
+>>>>>>> 8c85fed09867e2cdee5e61519efa9b89b3c41f5d
+=======
+
+    # author: Goto Kyosuke
+>>>>>>> 454546e19a47970df296d1498abe2d3c920def33
     def get_result(self, job_num = 0):  # job_num = 0にすることで、使うとき job_num-1 = -1 となり、最新のが使える。
         # self.flag[-1]["get_result"] = True　だったら、already executed表示
         if self.flag[-1]["get_result"] == True:
@@ -62,19 +68,15 @@ class Red_calibration():
         
         # job_status確認して表示
         nowstatus = self.job[job_num].status()
+        print(nowstatus.value)
+        
         if nowstatus == JobStatus.QUEUED: # status:queuedだったら、何番目か表示して、このまま待つか聞いて、待つようだったらjob monitor表示
-            print("status : QUEUED")
-            print("Now waiting")
-        else nowstatus == JobStatus.VALIDATING:
-            print("status : VALIDATING")
-        else nowstatus == JobStatus.RUNNING:
-            print("status : RUNNING")
-        else nowstatus == JobStatus.CANCELLED:
-            print("status : CANCELLED")
-        else nowstatus == JobStatus.DONE: # status:doneだったら/なったら、result取ってくる。
-            print("status : DONE")
-        else nowstatus == JobStatus.ERROR:
-            print("status : ERROR")
+            print("You're job number is ",self.job[job_num].queue_position)
+        
+        elif nowstatus == JobStatus.DONE: # status:doneだったら/なったら、result取ってくる。
+            #self.job[job_num] = 
+        
+        
         
         
         # job_num > self.job_num or job_num < 0 or not( type(job_num) == int )　だったら、raiseする。
@@ -83,7 +85,25 @@ class Red_calibration():
     
     
     # author: Mori Yugo
-    def draw(self, fitting=False, error=False, Ey=False, E1E2=False, save=False, job_num = 0):
+    def draw(self, fitting=False, error=0, Ey=False, E1E2=False, save=False, job_num = 0):
+        """
+        This function draws photoluminescence excitation (PLE).
+        
+        fitting: True or false
+        フィッティングするか選ぶ
+        
+        error: 1, 2 or 3
+        エラーバーを表示するか選ぶ
+        
+        Ey: True or false
+        Eyの中心値を表示するか選ぶ
+        
+        E1E2: True or false
+        E1E2の中心値を表示するか選ぶ
+        
+        save: True or false
+        Ey, E1E2を保存するか選べる
+        """
         #get resultにデータがあるか
         
         # optionでfittingするか選べる ← fitingのlistには_make_fittingメソッドを使って下さい。
@@ -91,8 +111,14 @@ class Red_calibration():
             self._make_fitting(job_num)
         
         # optionでエラーバーいれるか選べる。
-        if error == True:
-            # exexute error bar
+        if error == 1
+            # exexute error bar 1
+            pass
+        elif error = 2:
+            # exexute error bar 2
+            pass
+        elif error = 3:
+            # exexute error bar 3
             pass
         
         # optionでE1E2,Eyの中心値を表示するか選べる。 ← 中心値にはcalibrationメソッドを使ってください。
@@ -110,8 +136,7 @@ class Red_calibration():
         
         # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
         if self.mode == None:
-            print("error: run function is not done.")   #exeptionsのエラーリストからエラー表示→ここも直す
-        pass
+            raise KosakaQRedcalibrationError("Run function is not done.")
     
     
     def laser_draw(self, fitting=False, Ey=False, E1E2=False, save=False, job_num = 0):
