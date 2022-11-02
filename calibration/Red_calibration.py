@@ -41,9 +41,8 @@ class Red_calibration():
         self.flag[-1]["fitting"] = False
         return self.job[-1]  # result[0]=frequencyのlist, result[1]=count（縦軸), result[2] = エラーバーのlist
     
-<<<<<<< HEAD
+
     # author: Goto Kyosuke
-=======
     def jobs(self):
         if self.job_num == 0:
             print("There is no job.")
@@ -54,13 +53,8 @@ class Red_calibration():
                 else:
                     print("job",i+1,"... ","mode: ",self.mode[i], " get_result: done")
              
-<<<<<<< HEAD
-                
->>>>>>> 8c85fed09867e2cdee5e61519efa9b89b3c41f5d
-=======
 
     # author: Goto Kyosuke
->>>>>>> 454546e19a47970df296d1498abe2d3c920def33
     def get_result(self, job_num = 0):  # job_num = 0にすることで、使うとき job_num-1 = -1 となり、最新のが使える。
         # self.flag[-1]["get_result"] = True　だったら、already executed表示
         if self.flag[-1]["get_result"] == True:
