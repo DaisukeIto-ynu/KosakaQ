@@ -5,6 +5,11 @@ Created on Thu Oct 27 18:30:33 2022
 @author: Yokohama National University, Kosaka Lab
 """
 
+ #グラフの描画のためのインポート
+import matplotlib.pyplot as plt
+import numpty as np
+from .exceptions import KosakaQBackendValueError　　　
+
 class Red_calibration():
     def __init__(self):
         self.mode = None
@@ -37,13 +42,9 @@ class Red_calibration():
     def draw(self, fitting=False, error=False, Ey=False, E1E2=False, save=False, job_num = 0):
         #get resultにデータがあるか
         
-        #グラフの描画のためのインポート
-        import matplotlib.pyplot as plt
-        import numpty as np
-        
         # optionでfittingするか選べる ← fitingのlistには_make_fittingメソッドを使って下さい。
         if fitting == True:
-            self._make_fitting()   # execute fitting (実行というよりかはfittingのリストを関数を使って作る？)
+            self._make_fitting(job_num)
         
         # optionでエラーバーいれるか選べる。
         if error == True:
@@ -65,7 +66,7 @@ class Red_calibration():
         
         # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
         if self.mode == None:
-            print("error: run function is not done.")   #exeptionsのエラーリストからエラー表示
+            print("error: run function is not done.")   #exeptionsのエラーリストからエラー表示→ここも直す
         pass
     
     

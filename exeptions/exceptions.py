@@ -103,3 +103,6 @@ class KosakaQNotAuthorizedError(KosakaQError):
 class KosakaQApiError(KosakaQError):
     """Error raised when a server error encountered."""
     pass
+
+class RedCalibrationError(KosakaQError):
+    """Error raised when red calibration is not done correctly."""
