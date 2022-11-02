@@ -5,6 +5,13 @@ Created on Thu Oct 27 18:30:33 2022
 @author: Yokohama National University, Kosaka Lab
 """
 
+
+import copy
+from qiskit.exceptions import KosakaQRedcalibrationError
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+
 class Red_calibration():
     def __init__(self):
         self.mode = None
@@ -61,6 +68,27 @@ class Red_calibration():
         pass
     
         
-    def _make_fitting(self, job_num = 0): #Eyについてのfitingのlistを返す（ローレンチアン）、x0とγをself.x0とself.gammaに代入
-        # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
-        pass
+    def _make_fitting(self, job_num = 0):
+        #E1,E2はエラーを返す
+        #Eyについてのfitingのlistを返す（ローレンチアン）、x0とγをself.x0とself.gammaに代入
+        #runをまだ実行してなかったら(self.mode == None)、エラーを返す。
+        
+        if self.mode == "E1":  # E1の場合
+            raise KosakaQRedcalibrationError('E1です')
+            
+        elif self.mode == "E2":  # E2の場合
+            raise KosakaQRedcalibrationError('E2です')
+            
+        elif self.mode == "Ey":  # Eyの場合
+            fre_y = copy.deepcopy[self.result[job_num - 1][0]]  # 縦軸の値
+            cou_x = copy.deepcopy[self.result[job_num - 1][1]]  # 横軸の値
+            
+            
+            
+            # Ey_frequencyはフィッティング後の縦軸の値
+            Ey_frequency = 1
+            return Ey_frequency
+        
+        elif self.mode == "All":  # 全体の場合
+            return 0
+        
