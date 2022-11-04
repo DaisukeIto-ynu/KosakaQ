@@ -72,14 +72,13 @@ class Red_calibration():
                 raise KosakaQRedcalibrationError
         
         elif nowstatus == JobStatus.DONE: # status:doneだったら/なったら、result取ってくる。
-            #self.job[job_num] = 
-        
-        
-        
+            result = self.job[job_num][0]
+            
+        return result
         
         # job_num > self.job_num or job_num < 0 or not( type(job_num) == int )　だったら、raiseする。
         # 最後に、self.flag[job_num-1]["get_result"] = True
-            pass  # result[job_num-1][0]=frequencyのlist, result[job_num-1][1]=count（縦軸), result[job_num-1][2] = エラーバーのlist
+        # result[job_num-1][0]=frequencyのlist, result[job_num-1][1]=count（縦軸), result[job_num-1][2] = エラーバーのlist
 
 
     # author: Mori Yugo
