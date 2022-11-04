@@ -104,12 +104,12 @@ class KosakaQApiError(KosakaQError):
     """Error raised when a server error encountered."""
     pass
 
-<<<<<<< HEAD:exeptions/exceptions.py
+
 class KosakaQRedcalibrationError(KosakaQError):
     """Error raised in Red_calibration.py."""
     pass
 
-=======
+
 class RedCalibrationError(KosakaQError):
     """Error raised when red calibration is not done correctly."""
->>>>>>> upstream/main:exceptions/exceptions.py
+
