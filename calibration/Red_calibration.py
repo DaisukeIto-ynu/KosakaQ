@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from exceptions.exceptions import RedCalibrationError, KosakaQRedcalibrationError
 from KosakaQbackend import KosakaQbackend
+from job.job_monitor import job_monitor
 
 class Red_calibration():
     def __init__(self):
@@ -58,7 +59,9 @@ class Red_calibration():
 
     # author: Goto Kyosuke
     def get_result(self, job_num = 0):  # job_num = 0にすることで、使うとき job_num-1 = -1 となり、最新のが使える。
-        # self.flag[-1]["get_result"] = True　だったら、already executed表示
+        if job_num > self.job_num or job_num < 0 or not( type(job_num) == int ):
+            raise KosakaQRedcalibrationError
+        
         if self.flag[-1]["get_result"] == True:
             print("Already executed")
         
@@ -66,21 +69,22 @@ class Red_calibration():
         nowstatus = self.job[job_num].status()
         print(nowstatus.value)
         
-        if nowstatus == JobStatus.QUEUED: # status:queuedだったら、何番目か表示して、このまま待つか聞いて、待つようだったらjob monitor表示
-            print("You're job number is ",self.job[job_num].queue_position)
-            ans = input("Would you like to wait? y/n")
+        # status:queuedだったら、何番目か表示して、このまま待つか聞いて、待つようだったらjob monitor表示
+        if nowstatus == JobStatus.QUEUED:
+            print("You're job number is ",self.job[job_num].queue_position())
+            ans = input("Would you like to wait? y/n:")
             if ans == "y" or "yes":
-                pass
+                job_monitor()
             else:
                 raise KosakaQRedcalibrationError
+                
+        while(self.job[job_num].status() != JobStatus.DONE):
+            if nowstatus == JobStatus.DONE: # status:doneだったら/なったら、result取ってくる。
+                result = self.job[job_num].result() #final_result
         
-        elif nowstatus == JobStatus.DONE: # status:doneだったら/なったら、result取ってくる。
-            result = self.job[job_num][0]
-            
-        return result
+        self.flag[job_num-1]["get_result"] = True
+        return result[0]
         
-        # job_num > self.job_num or job_num < 0 or not( type(job_num) == int )　だったら、raiseする。
-        # 最後に、self.flag[job_num-1]["get_result"] = True
         # result[job_num-1][0]=frequencyのlist, result[job_num-1][1]=count（縦軸), result[job_num-1][2] = エラーバーのlist
 
 
