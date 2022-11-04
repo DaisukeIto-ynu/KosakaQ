@@ -7,17 +7,16 @@ Created on Thu Oct 27 18:30:33 2022
 
 
 import copy
-from qiskit.exceptions import KosakaQRedcalibrationError
 from qiskit.providers.jobstatus import JobStatus
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
  #グラフの描画のためのインポート
 import sys
-sys.path.append(".")
+sys.path.append("..")
 import matplotlib.pyplot as plt
-import numpty as np
-from exceptions.exceptions import RedCalibrationError
+import numpy as np
+from exceptions.exceptions import RedCalibrationError, KosakaQRedcalibrationError
 
 class Red_calibration():
     def __init__(self):
@@ -66,6 +65,11 @@ class Red_calibration():
         
         if nowstatus == JobStatus.QUEUED: # status:queuedだったら、何番目か表示して、このまま待つか聞いて、待つようだったらjob monitor表示
             print("You're job number is ",self.job[job_num].queue_position)
+            ans = input("Would you like to wait? y/n")
+            if ans == "y" or "yes":
+                pass
+            else:
+                raise KosakaQRedcalibrationError
         
         elif nowstatus == JobStatus.DONE: # status:doneだったら/なったら、result取ってくる。
             #self.job[job_num] = 
