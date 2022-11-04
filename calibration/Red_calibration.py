@@ -17,6 +17,7 @@ sys.path.append("..")
 import matplotlib.pyplot as plt
 import numpy as np
 from exceptions.exceptions import RedCalibrationError, KosakaQRedcalibrationError
+from KosakaQbackend import KosakaQbackend
 
 class Red_calibration():
     def __init__(self):
@@ -25,6 +26,7 @@ class Red_calibration():
         self.job = []
         self.mode = []
         self.calibration = []
+        self.backend = KosakaQbackend("rabi")
     
     def run(self, mode):  # 大輔が作ります
         """
@@ -33,6 +35,7 @@ class Red_calibration():
         """
         # self.result = []  # Rabi_project20_E6EL06_area06_NV04_PLE_all_0.txtの内容が入ったlistを返します。
         # self.power = []  #周波数 vs.laser_power
+        self.job.append(self.backend.run(mode))
         self.job_num += 1  # 発行したjobの数
         self.mode.append(mode)
         self.flag.append({})  # 各種Flag
