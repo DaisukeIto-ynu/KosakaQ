@@ -14,7 +14,7 @@ import matplotlib.cm as cm
  #グラフの描画のためのインポート
 import sys
 sys.path.append("..")
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt  #ここイランかも
 import numpy as np
 from exceptions.exceptions import RedCalibrationError, KosakaQRedcalibrationError
 from KosakaQbackend import KosakaQbackend
@@ -94,60 +94,75 @@ class Red_calibration():
         This function draws photoluminescence excitation (PLE).
         
         fitting: True or false
-        フィッティングするか選ぶ
-        
-        error: 1, 2 or 3
-        エラーバーを表示するか選ぶ
-        
+           フィッティングするか選ぶ
+        error: 0, 1, 2 or 3
+           1.範囲をエラーバーとするグラフを表示
+           2.標準偏差をエラーバーとするグラフを表示
+           3.標準誤差をエラーバーとするグラフを表示
         Ey: True or false
-        Eyの中心値を表示するか選ぶ
-        
+           Eyの中心値を表示するか選ぶ
         E1E2: True or false
-        E1E2の中心値を表示するか選ぶ
-        
+           E1E2の中心値を表示するか選ぶ
         save: True or false
-        Ey, E1E2を保存するか選べる
+           Ey, E1E2を保存するか選べる
         """
-        #get resultにデータがあるか
+        if job_num > self.job_num or job_num < 0 or not( type(job_num) == int ):   #get resultにデータがあるか
+            raise KosakaQRedcalibrationError
         
-        # optionでfittingするか選べる ← fitingのlistには_make_fittingメソッドを使って下さい。
-        if fitting == True:
+        if self.mode == None:   # runをまだ実行してなかったら(self.mode == None)、エラーを返す。（これは最初でやるべき？）
+            raise KosakaQRedcalibrationError("Run function is not done.")
+        
+        if fitting == True:   # optionでfittingするか選べる ← fitingのlistには_make_fittingメソッドを使って下さい。
             self._make_fitting(job_num)
         
+        fre_y = copy.deepcopy[self.result[job_num - 1][0]]  # 縦軸の値  # これいらんかも（しかし、これ消すとエラー出る）
+        cou_x = copy.deepcopy[self.result[job_num - 1][1]]  # 横軸の値
         # optionでエラーバーいれるか選べる。
-        if error == 1:
-            # exexute error bar 1
-            pass
-        elif error == 2:
-            # exexute error bar 2
-            pass
-        elif error == 3:
-            # exexute error bar 3
-            pass
+        # 参考文献: https://dreamer-uma.com/errorbar-python/
+        fre_y_mean = np.array(fre_y.mean())   # 各点を平均値とする
+        if error == 1:   # 範囲をエラーバーとしたグラフ
+            fre_yerr_scope = np.array(fre_y.max() - fre_y.min())   #データの範囲
+            fig, ax = plt.subplots()
+            ax.plot(cou_x, fre_y, marker='o')
+            ax.errorbar(cou_x, fre_y_mean, fre_yerr=fre_yerr_scope, capsize=3, fmt='o', ecolor='k', ms=7, mfc='None', mec='k')
+            ax.set_title('photoluminescence excitation (PLE) - error bar: scope')
+        elif error == 2:   # 標準偏差をエラーバーとしたグラフ
+            fre_yerr_sd = np.array(fre_y.std())   #標準偏差
+            fig, ax = plt.subplots()
+            ax.plot(cou_x, fre_y, marker='o')
+            ax.errorbar(cou_x, fre_y_mean, fre_yerr=fre_yerr_sd, capsize=3, fmt='o', ecolor='k', ms=7, mfc='None', mec='k')
+            ax.set_title('photoluminescence excitation (PLE) - error bar: SD')
+        elif error == 3:   # 標準誤差をエラーバーとしたグラフ
+            fre_yerr_se = np.array(fre_y.std() / np.sqrt(len(fre_y)))   #標準偏差
+            fig, ax = plt.subplots()
+            ax.plot(cou_x, fre_y, marker='o')
+            ax.errorbar(cou_x, fre_y_mean, fre_yerr=fre_yerr_se, capsize=3, fmt='o', ecolor='k', ms=7, mfc='None', mec='k')
+            ax.set_title('photoluminescence excitation (PLE) - error bar: SE')
+        ax.set_xlabel('count')
+        ax.set_xlabel('frequency')
+        plt.show()
         
-        # optionでE1E2,Eyの中心値を表示するか選べる。 ← 中心値にはcalibrationメソッドを使ってください。
-        if Ey == True:
+        if Ey == True:   # optionでE1E2,Eyの中心値を表示するか選べる。 ← 中心値にはcalibrationメソッドを使ってください。
             self.calibration(job_num)
         if E1E2 == True:
             self.calibration(job_num)
-            
-        # optionで保存するか選べる。
-        if save == True:
-            pass
-            # save
+        
+        if save == True:   # optionで保存するか選べる。(保存とは何の保存を意味しているのか？)
+            f = open("calibration.txt")
+            f.write("calibration")
+            f.write(str(self.calibration[job_num-1]))
+            f.close()
         
         # その他、optionを入れる。optionは引数にするが、あくまでoptionなので、選ばなくても良いようにする。
-        
-        # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
-        if self.mode == None:
-            raise KosakaQRedcalibrationError("Run function is not done.")
     
     
+    # author: Mori Yugo
     def laser_draw(self, fitting=False, Ey=False, E1E2=False, save=False, job_num = 0):
         # optionでfittingするか選べる ← fitingのlistはこちらは簡単だと思うので、自分で作って下さい。
         # optionで保存するか選べる。
         # その他、optionを入れる。optionは引数にするが、あくまでoptionなので、選ばなくても良いようにする。
-        # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
+        if self.mode == None:   # runをまだ実行してなかったら(self.mode == None)、エラーを返す。（これは最初でやるべき？）
+            raise KosakaQRedcalibrationError("Run function is not done.")
         pass
 
     # author: Honda Yuma
