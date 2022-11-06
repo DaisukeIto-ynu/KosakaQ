@@ -17,11 +17,12 @@ import sys
 import time
 from typing import TextIO, Optional
 
-from .ibmqjob import IBMQJob
-from ..utils.converters import duration_difference
+from KosakaQjob import KosakaQJob
+sys.path.append(".")
+from utils.converters import duration_difference
 
 
-def _text_checker(job: IBMQJob,
+def _text_checker(job: KosakaQJob,
                   interval: float,
                   _interval_set: bool = False,
                   output: TextIO = sys.stdout) -> None:
@@ -93,7 +94,7 @@ def _text_checker(job: IBMQJob,
     print('', file=output)
 
 
-def job_monitor(job: IBMQJob,
+def job_monitor(job: KosakaQJob,
                 interval: Optional[float] = None,
                 output: TextIO = sys.stdout) -> None:
     """Monitor the status of an ``IBMQJob`` instance.

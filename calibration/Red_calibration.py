@@ -7,6 +7,8 @@ Created on Thu Oct 27 18:30:33 2022
 
 
 import copy
+import random
+import time
 from qiskit.providers.jobstatus import JobStatus
 import numpy as np
 import matplotlib.pyplot as plt
@@ -72,18 +74,20 @@ class Red_calibration():
         # status:queuedだったら、何番目か表示して、このまま待つか聞いて、待つようだったらjob monitor表示
         if nowstatus == JobStatus.QUEUED:
             print("You're job number is ",self.job[job_num].queue_position())
-            ans = input("Would you like to wait? y/n:")
+            ans = input("Do you wait? y/n:")
             if ans == "y" or "yes":
                 job_monitor()
             else:
                 raise KosakaQRedcalibrationError
                 
-        while(self.job[job_num].status() != JobStatus.DONE):
+        while (not (self.job[job_num].status() == JobStatus.DONE)):
             if nowstatus == JobStatus.DONE: # status:doneだったら/なったら、result取ってくる。
-                result = self.job[job_num].result() #final_result
+                result = self.job[job_num].result() #resultはResultクラスのインスタンス
+            time.sleep(random.randrange(8, 12, 1))
         
         self.flag[job_num-1]["get_result"] = True
-        return result[0]
+        
+        return result.data()
         
         # result[job_num-1][0]=frequencyのlist, result[job_num-1][1]=count（縦軸), result[job_num-1][2] = エラーバーのlist
 
