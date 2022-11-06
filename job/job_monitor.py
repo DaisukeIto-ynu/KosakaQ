@@ -17,8 +17,9 @@ import sys
 import time
 from typing import TextIO, Optional
 
-from .KosakaQjob import KosakaQJob
-from ..utils.converters import duration_difference
+from KosakaQjob import KosakaQJob
+sys.path.append(".")
+from utils.converters import duration_difference
 
 
 def _text_checker(job: KosakaQJob,
