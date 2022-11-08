@@ -157,11 +157,8 @@ class Red_calibration():
         #Eyについてのfitingのlistを返す（ローレンチアン）、x0とγをself.x0とself.gammaに代入
         #runをまだ実行してなかったら(self.mode == None)、エラーを返す。
         
-        if self.mode == "E1":  # E1の場合
-            raise KosakaQRedcalibrationError('E1です')
-            
-        elif self.mode == "E2":  # E2の場合
-            raise KosakaQRedcalibrationError('E2です')
+        if self.mode == "E1_E2":  # E1_E2の場合
+            raise KosakaQRedcalibrationError('E1_E2です')
             
         elif self.mode == "Ey":  # Eyの場合
             fre_y = copy.deepcopy[self.result[job_num - 1][0]]  # 縦軸の値
