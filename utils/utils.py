@@ -17,8 +17,8 @@ from threading import Condition
 from queue import Queue
 
 from qiskit.providers.jobstatus import JobStatus
-
-from ..apiconstants import ApiJobStatus
+from qiskit.providers.ibmq.apiconstants import ApiJobStatus
+#from ..apiconstants import ApiJobStatus
 
 
 API_TO_JOB_STATUS = {
