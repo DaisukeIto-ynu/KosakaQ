@@ -30,6 +30,7 @@ class Red_calibration():
         self.job = []
         self.mode = []
         self.calibration = []
+        self.result = []
         self.backend = KosakaQbackend("rabi")
     
     def run(self, mode):  # 大輔が作ります
@@ -37,7 +38,7 @@ class Red_calibration():
         mode: Ey or E1E2 or all
         どの周りのスペクトルを取るか選べる。
         """
-        # self.result = []  # Rabi_project20_E6EL06_area06_NV04_PLE_all_0.txtの内容が入ったlistを返します。
+        self.result.append([])   # Rabi_project20_E6EL06_area06_NV04_PLE_all_0.txtの内容が入ったlistを返します。
         # self.power = []  #周波数 vs.laser_power
         if not(mode == "Ey" or mode == "E1E2" or mode == "all"):
             raise KosakaQRedcalibrationError('choose mode from "Ey" or "E1E2" or "all"')
@@ -64,6 +65,9 @@ class Red_calibration():
 
     # author: Goto Kyosuke
     def get_result(self, job_num = 0):  # job_num = 0にすることで、使うとき job_num-1 = -1 となり、最新のが使える。
+        """
+        This function gets results of Red-raser calibration.
+        """
         if job_num > self.job_num or job_num < 0 or not( type(job_num) == int ):
             raise KosakaQRedcalibrationError
         
@@ -71,26 +75,28 @@ class Red_calibration():
             print("Already executed")
         
         # job_status確認して表示
-        nowstatus = self.job[job_num].status()
+        nowstatus = self.job[job_num-1].status()
         print(nowstatus.value)
         
         # status:queuedだったら、何番目か表示して、このまま待つか聞いて、待つようだったらjob monitor表示
         if nowstatus == JobStatus.QUEUED:
-            print("You're job number is ",self.job[job_num].queue_position())
+            print("You're job number is ",self.job[job_num-1].queue_position())
             ans = input("Do you wait? y/n:")
             if ans == "y" or "yes":
                 job_monitor()
             else:
                 raise KosakaQRedcalibrationError
                 
-        while (not (self.job[job_num].status() == JobStatus.DONE)):
+        while (not (self.job[job_num-1].status() == JobStatus.DONE)):
             if nowstatus == JobStatus.DONE: # status:doneだったら/なったら、result取ってくる。
-                result = self.job[job_num].result() #resultはResultクラスのインスタンス
+                result = self.job[job_num-1].result() #resultはResultクラスのインスタンス
             time.sleep(random.randrange(8, 12, 1))
         
         self.flag[job_num-1]["get_result"] = True
         
-        return result.data()
+        self.result[job_num-1].append(result._get_experiment())
+        
+        return result._get_experiment()
         
         # result[job_num-1][0]=frequencyのlist, result[job_num-1][1]=count（縦軸), result[job_num-1][2] = エラーバーのlist
 
