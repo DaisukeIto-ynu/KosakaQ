@@ -180,7 +180,7 @@ class Red_calibration():
         pass
 
     
-<<<<<<< HEAD
+
     def calibration(self, job_num = 0):
         """
         
@@ -251,8 +251,7 @@ class Red_calibration():
         pass
     
     
-=======
->>>>>>> upstream/main
+
     def save(self, job_num = 0):  # jsonにE1とExEy保存する。
         if job_num > self.job_num or job_num < 0 or not( type(job_num) == int ):
             raise KosakaQRedcalibrationError
