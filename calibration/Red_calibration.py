@@ -180,6 +180,79 @@ class Red_calibration():
         pass
 
     
+<<<<<<< HEAD
+    def calibration(self, job_num = 0):
+        """
+        
+
+        Parameters
+        ----------
+        job_num : TYPE, optional
+            DESCRIPTION. The default is 0.
+
+        Returns
+        -------
+        None.
+
+        """
+        
+        import copy
+        list1 = copy.deepcopy(self.result[job_num-1][0])#周波数（横軸）
+        list2 = copy.deepcopy(self.result[job_num-1][1])#光子数（縦軸）
+        list3 = copy.deepcopy(self.result[job_num-1][2])#エラーバー
+        list4 = list()#傾き代入用の空のリスト作成
+        if self.mode[job_num-1] == "E1E2":#二つの頂点のちょうど中心を取る
+            import numpy as np
+            
+            i = 0#whileのためのカウント用i
+            while i<= 91:#101個なので91まで
+                
+                x = np.array(list1)#numpyのarrayにリストを入れる
+                y = np.array(list2)#xと同様
+
+                def katamuki(x, y):#傾きを求める関数
+                    n = 10#10こ区切り
+                    a = ((np.dot(x[i:i+n-1], y[i:i+n-1])- y[i:i+n-1].sum() * x[i:i+n-1].sum()/n)/
+                         ((x[i:i+n-1] ** 2).sum() - x[i:i+n-1].sum()**2 / n))#スライシングで10個分の最小二乗法による傾き
+                    b = (y[i:i+n-1].sum() - a * x[i:i+n-1].sum())/n#切片（不要）
+                    return a, b
+
+                a, b = katamuki(x, y)#a,bに傾きと切片代入
+                list4.append(a)#リストに傾き代入
+                i = i+1#カウント＋１する
+            for #list4回して、マイナスになったインデックスから極地のHzのためのインデックスを求める
+                
+        elif self.mode[job_num-1] == "all":
+            import numpy as np
+            
+            i = 0#whileのためのカウント用i
+            while i<= 491:#501個なので491まで
+                
+                x = np.array(list1)#numpyのarrayにリストを入れる
+                y = np.array(list2)#xと同様
+
+                def katamuki(x, y):#傾きを求める関数
+                    n = 10#10こ区切り
+                    a = ((np.dot(x[i:i+n-1], y[i:i+n-1])- y[i:i+n-1].sum() * x[i:i+n-1].sum()/n)/
+                         ((x[i:i+n-1] ** 2).sum() - x[i:i+n-1].sum()**2 / n))#スライシングで10個分の最小二乗法による傾き
+                    b = (y[i:i+n-1].sum() - a * x[i:i+n-1].sum())/n#切片（不要）
+                    return a, b
+
+                a, b = katamuki(x, y)#a,bに傾きと切片代入
+                list4.append(a)#リストに傾き代入
+                i = i+1#カウント＋１する
+        elif self.mode[job_num-1] == "Ey":
+            #Eyは_make_fittingのself.x0を返す。
+        else:
+            print("error")
+        #list1,2,3で頂点の探し方を考える。範囲絞っての最大値or極値
+        
+        # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
+        pass
+    
+    
+=======
+>>>>>>> upstream/main
     def save(self, job_num = 0):  # jsonにE1とExEy保存する。
         if job_num > self.job_num or job_num < 0 or not( type(job_num) == int ):
             raise KosakaQRedcalibrationError
