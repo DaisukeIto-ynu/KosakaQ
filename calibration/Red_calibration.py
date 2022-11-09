@@ -41,7 +41,7 @@ class Red_calibration():
         # self.power = []  #周波数 vs.laser_power
         if not(mode == "Ey" or mode == "E1E2" or mode == "all"):
             raise KosakaQRedcalibrationError('choose mode from "Ey" or "E1E2" or "all"')
-        self.job.append(self.backend.run(mode))
+        self.job.append(self.backend.run("red"+mode))
         self.job_num += 1  # 発行したjobの数
         self.mode.append(mode)
         self.flag.append({})  # 各種Flag
@@ -190,7 +190,11 @@ class Red_calibration():
                 json_data = json.load(json_file)
         except:
             json_data = {}
-        json_data["red"] = self.calibration[job_num-1]
+            json_data["red"] = {}
+        if self.mode[job_num-1] == "Ey" or self.mode[job_num-1] == "all":
+            json_data["red"]["Ey"] = self.calibration[job_num-1]["Ey"]
+        if self.mode[job_num-1] == "E1E2" or self.mode[job_num-1] == "all":
+            json_data["red"]["E1E2"] = self.calibration[job_num-1]["E1E2"]
         with open("calibration_data.json", "w") as json_file:
             json.dump(json_data,json_file)
 
