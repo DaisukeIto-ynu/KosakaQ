@@ -240,8 +240,11 @@ class KosakaQJob(Job):
             self.status()
             if self._status == JobStatus.CANCELLED or self._status == JobStatus.ERROR:
                 raise Exception
-        expdata = ExperimentResultData(counts=self.data.get("counts"))
-        expresult = ExperimentResult(shots=self.data.get("shots"),success=True,data=expdata)
+        if self.data.get("mode") == "redE1E2" or self.data.get("mode") == "redEy" or self.data.get("mode") == "redall":
+            expresult = self.data.get("calib_data")
+        else:
+            expdata = ExperimentResultData(counts=self.data.get("counts"))
+            expresult = ExperimentResult(shots=self.data.get("shots"),success=True,data=expdata)
         final_result = Result(backend_name=self._backend, backend_version="1.0.0", qobj_id=self._job_id ,job_id=self._job_id, success=True, results=[expresult])
         return final_result
         
