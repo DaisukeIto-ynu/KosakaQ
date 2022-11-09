@@ -180,28 +180,49 @@ class Red_calibration():
         pass
     
 
+
     # author: Ebihara Syo
     def _make_fitting(self, job_num = 0):
         #E1,E2はエラーを返す
         #Eyについてのfitingのlistを返す（ローレンチアン）、x0とγをself.x0とself.gammaに代入
         #runをまだ実行してなかったら(self.mode == None)、エラーを返す。
         
-        if self.mode == "E1":  # E1の場合
-            raise KosakaQRedcalibrationError('E1です')
+        if self.mode == None:  # runを実行してなかった場合
+            raise KosakaQRedcalibrationError('runが実行されていません')
             
-        elif self.mode == "E2":  # E2の場合
-            raise KosakaQRedcalibrationError('E2です')
+        elif self.mode == "E1_E2":  # E1_E2の場合
+            raise KosakaQRedcalibrationError('E1_E2です')
             
         elif self.mode == "Ey":  # Eyの場合
-            fre_y = copy.deepcopy[self.result[job_num - 1][0]]  # 縦軸の値
-            cou_x = copy.deepcopy[self.result[job_num - 1][1]]  # 横軸の値
+            fre_y1 = copy.deepcopy[self.result[job_num - 1][0]]  # 縦軸の値
+            cou_x1 = copy.deepcopy[self.result[job_num - 1][1]]  # 横軸の値
             
+            #ローレンツ関数の初期値　beta = [バックグラウンドの強度, ローレンツ関数の強度, 線幅, ピーク位置]
+            beta = np.array([0, 0, 0, 0])
+            tolerance =  1e-4
+            epsilon = 1e-4
             
+            delta = 2*tolerance
+            alpha = 1
+            while np.linalg.norm(delta) > tolerance:
+                F = fre_y1-(beta[0]+beta[1]/(beta[2]+pow(cou_x1+beta[3],2)))
+                J = np.zeros((len(F), len(beta)))  # 有限差分ヤコビアン
+                for jj in range(0, len(beta)):
+                    dBeta = np.zeros(beta.shape)
+                    dBeta[jj] = epsilon
+                    J[:, jj] = (fre_y1-((beta[0]+dBeta[0])+(beta[1]+dBeta[1])/((beta[2]+dBeta[2])+pow(cou_x1+(beta[3]+dBeta[3]),2)))-F)/epsilon
+                delta = -np.linalg.pinv(J).dot(F)  # 探索方向
+                beta = beta + alpha*delta
             
-            # Ey_frequencyはフィッティング後の縦軸の値
-            Ey_frequency = 1
-            return Ey_frequency
+            # Ey_frequencyはフィッティング後の縦軸のリスト
+            Ey1_frequency = beta[0]+beta[1]/(beta[2]+pow(cou_x1+beta[3],2))
+            return Ey1_frequency
+        
         
         elif self.mode == "All":  # 全体の場合
-            return 0
+            # Ey_frequencyはフィッティング後の縦軸のリスト
+            Ey2_frequency = 1
+            return Ey2_frequency
+        
+        
         
