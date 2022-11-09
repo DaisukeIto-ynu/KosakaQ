@@ -165,6 +165,7 @@ class Red_calibration():
             raise KosakaQRedcalibrationError("Run function is not done.")
         pass
 
+
     # author: Honda Yuma
     def calibration(self, job_num = 0):  # E1E2とEyのキャリブレーション結果を返す ← E1E2は二つの頂点のちょうど中心を取る。Eyは_make_fittingのself.x0を返す。
         # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
