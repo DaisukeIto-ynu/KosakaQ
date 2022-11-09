@@ -9,6 +9,7 @@ Created on Thu Oct 27 18:30:33 2022
 import copy
 import random
 import time
+import json
 from qiskit.providers.jobstatus import JobStatus
 import numpy as np
 import matplotlib.pyplot as plt
@@ -38,6 +39,8 @@ class Red_calibration():
         """
         # self.result = []  # Rabi_project20_E6EL06_area06_NV04_PLE_all_0.txtの内容が入ったlistを返します。
         # self.power = []  #周波数 vs.laser_power
+        if not(mode == "Ey" or mode == "E1E2" or mode == "all"):
+            raise KosakaQRedcalibrationError('choose mode from "Ey" or "E1E2" or "all"')
         self.job.append(self.backend.run(mode))
         self.job_num += 1  # 発行したjobの数
         self.mode.append(mode)
@@ -169,17 +172,27 @@ class Red_calibration():
             raise KosakaQRedcalibrationError("Run function is not done.")
         pass
 
+
     # author: Honda Yuma
     def calibration(self, job_num = 0):  # E1E2とEyのキャリブレーション結果を返す ← E1E2は二つの頂点のちょうど中心を取る。Eyは_make_fittingのself.x0を返す。
         # runをまだ実行してなかったら(self.mode == None)、エラーを返す。
         # 結果は　self.calibration[job_num-1]に辞書で入れる。例）[{E1E2:470.0678453678},{E1E2:470.0034567, Ey:470.145678}]
         pass
-    
+
     
     def save(self, job_num = 0):  # jsonにE1とExEy保存する。
-        pass
-    
-
+        if job_num > self.job_num or job_num < 0 or not( type(job_num) == int ):
+            raise KosakaQRedcalibrationError
+        if self.flag[job_num-1]["calibration"] == False:
+            raise KosakaQRedcalibrationError
+        try:
+            with open("calibration_data.json", "r") as json_file:
+                json_data = json.load(json_file)
+        except:
+            json_data = {}
+        json_data["red"] = self.calibration[job_num-1]
+        with open("calibration_data.json", "w") as json_file:
+            json.dump(json_data,json_file)
 
     # author: Ebihara Syo
     def _make_fitting(self, job_num = 0):
