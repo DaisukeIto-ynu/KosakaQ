@@ -122,13 +122,13 @@ class Red_calibration():
         if job_num > self.job_num or job_num < 0 or not( type(job_num) == int ):   #get resultにデータがあるか
             raise KosakaQRedcalibrationError
         
-        if self.mode == None:   # runをまだ実行してなかったら(self.mode == None)、エラーを返す。（これは最初でやるべき？）
+        if self.mode[job_num-1] == None:   # runをまだ実行してなかったら(self.mode == None)、エラーを返す。（これは最初でやるべき？）
             raise KosakaQRedcalibrationError("Run function is not done.")
         
         if fitting == True:   # optionでfittingするか選べる ← fitingのlistには_make_fittingメソッドを使って下さい。
             self._make_fitting(job_num)
+            fre_y = self._make_fitting(job_num)   # 縦軸の値
         
-        fre_y = copy.deepcopy[self.result[job_num - 1][0]]  # 縦軸の値  # これいらんかも（しかし、これ消すとエラー出る）
         cou_x = copy.deepcopy[self.result[job_num - 1][1]]  # 横軸の値
         # optionでエラーバーいれるか選べる。
         # 参考文献: https://dreamer-uma.com/errorbar-python/
@@ -161,22 +161,18 @@ class Red_calibration():
             self.calibration(job_num)
         
         if save == True:   # optionで保存するか選べる。(保存とは何の保存を意味しているのか？)
-            f = open("calibration.txt")
-            f.write("calibration")
-            f.write(str(self.calibration[job_num-1]))
-            f.close()
+            self.save(job_num)
         
         # その他、optionを入れる。optionは引数にするが、あくまでoptionなので、選ばなくても良いようにする。
     
     
     # author: Mori Yugo
-    def laser_draw(self, fitting=False, Ey=False, E1E2=False, save=False, job_num = 0):
-        # optionでfittingするか選べる ← fitingのlistはこちらは簡単だと思うので、自分で作って下さい。
-        # optionで保存するか選べる。
-        # その他、optionを入れる。optionは引数にするが、あくまでoptionなので、選ばなくても良いようにする。
-        if self.mode == None:   # runをまだ実行してなかったら(self.mode == None)、エラーを返す。（これは最初でやるべき？）
-            raise KosakaQRedcalibrationError("Run function is not done.")
-        pass
+    # def laser_draw(self, fitting=False, Ey=False, E1E2=False, save=False, job_num = 0):
+    #     # optionでfittingするか選べる ← fitingのlistはこちらは簡単だと思うので、自分で作って下さい。
+    #     # optionで保存するか選べる。
+    #     # その他、optionを入れる。optionは引数にするが、あくまでoptionなので、選ばなくても良いようにする。
+    #     if self.mode == None:   # runをまだ実行してなかったら(self.mode == None)、エラーを返す。（これは最初でやるべき？）
+    #         raise KosakaQRedcalibrationError("Run function is not done.")
 
 
     # author: Honda Yuma
