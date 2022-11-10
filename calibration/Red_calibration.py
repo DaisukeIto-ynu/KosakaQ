@@ -197,15 +197,11 @@ class Red_calibration():
         None.
 
         """
-        
-        import copy
         list1 = copy.deepcopy(self.result[job_num-1][0])#周波数（横軸）
         list2 = copy.deepcopy(self.result[job_num-1][1])#光子数（縦軸）
         list3 = copy.deepcopy(self.result[job_num-1][2])#エラーバー
         list4 = list()#傾き代入用の空のリスト作成
         if self.mode[job_num-1] == "E1E2":#二つの頂点のちょうど中心を取る
-            import numpy as np
-            
             i = 0#whileのためのカウント用i
             while i<= 91:#101個なので91まで
                 
@@ -224,9 +220,7 @@ class Red_calibration():
                 i = i+1#カウント＋１する
             for #list4回して、マイナスになったインデックスから極地のHzのためのインデックスを求める
                 
-        elif self.mode[job_num-1] == "all":
-            import numpy as np
-            
+        elif self.mode[job_num-1] == "all"
             i = 0#whileのためのカウント用i
             while i<= 491:#501個なので491まで
                 
