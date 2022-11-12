@@ -205,26 +205,36 @@ class KosakaQbackend(BackendV2):
         Returns:
             Job: The job object for the run
         """
-        if isinstance(run_input,QuantumCircuit):
-            json_data = {}
-            json_data["mode"] = "circuit"
-            json_data["Gates_num"] = run_input.data.__len__()
-            json_data["Gates_name"] = [run_input.data[i]._legacy_format[0].name for i in range(run_input.data.__len__())]
-            json_data["Gates_num_qubits"] = [run_input.data[i]._legacy_format[0].num_qubits for i in range(run_input.data.__len__())]
-            json_data["Gates_num_clbits"] = [run_input.data[i]._legacy_format[0].num_clbits for i in range(run_input.data.__len__())]
-            json_data["Gates_params"] = [run_input.data[i]._legacy_format[0].params for i in range(run_input.data.__len__())]
-            json_data["Gates_qubits"] = [[run_input.data[i]._legacy_format[1][j]._index for j in range(run_input.data[i]._legacy_format[0].num_qubits)] for i in range(run_input.data.__len__())]
-            json_data["Gates_clbits"] = [[run_input.data[i]._legacy_format[2][j]._index for j in range(run_input.data[i]._legacy_format[0].num_clbits)] for i in range(run_input.data.__len__())]
-            if "shots" in options:
-                json_data["shots"] = options["shots"]
-            else:
-                json_data["shots"] = 1024
+        # if isinstance(run_input,QuantumCircuit):
+        #     json_data = {}
+        #     json_data["mode"] = "circuit"
+        #     json_data["Gates_num"] = run_input.data.__len__()
+        #     json_data["Gates_name"] = [run_input.data[i]._legacy_format[0].name for i in range(run_input.data.__len__())]
+        #     json_data["Gates_num_qubits"] = [run_input.data[i]._legacy_format[0].num_qubits for i in range(run_input.data.__len__())]
+        #     json_data["Gates_num_clbits"] = [run_input.data[i]._legacy_format[0].num_clbits for i in range(run_input.data.__len__())]
+        #     json_data["Gates_params"] = [run_input.data[i]._legacy_format[0].params for i in range(run_input.data.__len__())]
+        #     json_data["Gates_qubits"] = [[run_input.data[i]._legacy_format[1][j]._index for j in range(run_input.data[i]._legacy_format[0].num_qubits)] for i in range(run_input.data.__len__())]
+        #     json_data["Gates_clbits"] = [[run_input.data[i]._legacy_format[2][j]._index for j in range(run_input.data[i]._legacy_format[0].num_clbits)] for i in range(run_input.data.__len__())]
+        #     if "shots" in options:
+        #         json_data["shots"] = options["shots"]
+        #     else:
+        #         json_data["shots"] = 1024
         
-        else:
-            json_data = run_input
-
+        # else:
+        #     json_data = run_input
+        
+        # =============================================================================
+        # ここから、qobjのassemble
+        # =============================================================================
+        
+        qobj = 'ここにassemble'
+        
+        # =============================================================================
+        # ここまで
+        # =============================================================================
         # KQcom = KosakaQ_communicate(self._check_run_input(run_input), self.IP)
-        KQcom = KosakaQ_communicate(json_data, self.IP)
+        # KQcom = KosakaQ_communicate(json_data, self.IP)
+        KQcom = KosakaQ_communicate(qobj, self.IP)
         
         ###job_id受付部分：サーバーからackが帰ってくるまで、lifeが残る限り例外処理を続け、timeoutする度に再送信する###
         send_uncomplete_life = 5
